@@ -74,7 +74,7 @@ const StudentProfile = () => {
           <div className='bg-white rounded-3xl h-full p-5'>
             {
               isPage === 'home' ? (
-                <StudentHome appliedColleges={appliedColleges} />
+                <StudentHome appliedColleges={appliedColleges} studentData={studentData} />
               ) : isPage === 'college' ? (
                 <AppliedColleges appliedColleges={appliedColleges} />
               ) : isPage === 'profile' ? (

@@ -8,10 +8,25 @@ export const AdminProvider = ({ children }) => {
     const [users, setUsers] = useState([]);
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
-        fetchData();
-    }, [])
+        const checkAdmin = () => {
+            const userRole = localStorage.getItem("role");
+            setIsAdmin(userRole === "admin");
+        };
+
+        checkAdmin();
+        window.addEventListener("storage", checkAdmin);
+
+        return () => window.removeEventListener("storage", checkAdmin);
+    }, []);
+
+    useEffect(() => {
+        if (isAdmin) {
+            fetchData();
+        }
+    }, [isAdmin]);
 
     const fetchData = async () => {
         const headers = {
@@ -21,7 +36,7 @@ export const AdminProvider = ({ children }) => {
         setLoading(true);
 
         try {
-            const [ MessageData, userData ] = await Promise.all([
+            const [MessageData, userData] = await Promise.all([
                 getSubmitedContactAPI(headers),
                 getAllUsersAPI(headers),
             ]);

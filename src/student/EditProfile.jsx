@@ -1,4 +1,3 @@
-import { input } from 'framer-motion/client';
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { FiLogOut } from "react-icons/fi";
@@ -50,6 +49,7 @@ const EditProfile = ({ studentData }) => {
     localStorage.clear();
     navigate('/');
   }
+  console.log(studentData);
 
   return (
     <div>

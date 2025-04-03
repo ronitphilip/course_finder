@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { FiLogOut } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom';
-import { updateCollegeAPI } from '../services/allAPI'; // Import API call
-import toast from 'react-hot-toast'; // For success/error messages
+import { updateCollegeAPI } from '../services/allAPI';
+import toast from 'react-hot-toast';
 import { useCollege } from '../context/CollegeContext';
 
 const EditProfile = ({ collegeData }) => {

@@ -30,31 +30,35 @@ const Colleges = () => {
       ? [...new Set(location.filter((item) => item.state === selectedState).map((item) => item.district))]
       : [];
 
-  const filteredColleges = colleges.filter((college) => {
-    const isSearchOrFilterActive =
-      searchQuery ||
-      selectedState ||
-      selectedDistrict ||
-      selectedCourse;
-
-    const collegeNameMatch = searchQuery
-      ? college.name.toLowerCase().includes(searchQuery.toLowerCase())
-      : true;
-
-    const courseMatch = searchQuery
-      ? college.courses.some(course => course.name.toLowerCase().includes(searchQuery.toLowerCase()))
-      : true;
-
-    const approvedCheck = isSearchOrFilterActive ? true : college.is_approved;
-
-    return (
-      approvedCheck &&
-      (!selectedState || college.state === selectedState) &&
-      (!selectedDistrict || college.district === selectedDistrict) &&
-      (!selectedCourse || college.courses.some(course => course.name === selectedCourse)) &&
-      (collegeNameMatch || courseMatch)
-    );
-  });
+      const filteredColleges = colleges.filter((college) => {
+        const isSearchOrFilterActive =
+          searchQuery ||
+          selectedState ||
+          selectedDistrict ||
+          selectedCourse;
+      
+        const collegeNameMatch = searchQuery
+          ? college.name.toLowerCase().includes(searchQuery.toLowerCase())
+          : true;
+      
+        const courseMatch = searchQuery
+          ? college.courses.some(course => course.name.toLowerCase().includes(searchQuery.toLowerCase()))
+          : true;
+      
+        const selectedCourseMatch = selectedCourse
+          ? college.courses.some(course => course.name.toLowerCase() === selectedCourse.toLowerCase())
+          : true;
+      
+        const approvedCheck = isSearchOrFilterActive ? true : college.is_approved;
+      
+        return (
+          approvedCheck &&
+          (!selectedState || college.state === selectedState) &&
+          (!selectedDistrict || college.district === selectedDistrict) &&
+          selectedCourseMatch && 
+          (collegeNameMatch || courseMatch)
+        );
+      });
 
   const handleCourseSelect = (course) => {
     setSelectedCourse(prev => (prev === course ? '' : course));

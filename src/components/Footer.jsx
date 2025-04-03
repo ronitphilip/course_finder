@@ -14,7 +14,7 @@ const Footer = () => {
           <p className="text-sm mt-2 max-w-xs">
             Helping students discover the best colleges that match their goals and aspirations. Find your dream college and take the next step toward a bright future.
           </p>
-          <p className="text-sm mt-2 max-w-xs">Currently v1.3.3.</p>
+          <p className="text-sm mt-2 max-w-xs">Currently v1.3.4.</p>
         </div>
 
         <div></div>

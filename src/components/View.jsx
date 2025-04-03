@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { appliedCollegesAPI, fetchCollegeDetailsAPI } from "../services/allAPI";
-import { FaCheckCircle, FaMapMarkerAlt, FaSearch, FaGraduationCap, FaStar } from "react-icons/fa";
+import { FaCheckCircle, FaMapMarkerAlt, FaSearch, FaGraduationCap, FaStar, FaArrowLeft } from "react-icons/fa";
 import ApplyPop from "./ApplyPop";
 import Comments from "./Comments";
 
 const View = () => {
+
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [college, setCollege] = useState([]);
   const [appData, setAppData] = useState([]);
@@ -68,38 +70,48 @@ const View = () => {
     <>
       <div>
         {
-          showPopup && <ApplyPop appData={appData} college={college} id={id} onClose={() => setShowPopup(false)} />
+          showPopup && <ApplyPop appData={appData} college={college} id={id} setShowPopup={setShowPopup} />
         }
       </div>
+      <div className="absolute top-12 left-10 z-10">
+        <button onClick={() => navigate('/')} className="flex items-center text-white cursor-pointer">
+          <FaArrowLeft className="text-xl" />
+          <span className="text-xl ms-2">Home</span>
+        </button>
+      </div>
       <div className="min-h-screen bg-gray-900 text-white p-6 flex flex-col md:flex-row gap-10">
-        {/* Left Section - College Image & Basic Info */}
         <div className="md:w-3/4 flex flex-col items-center mt-3">
-          {/* College Image */}
           <img
             src={college?.image}
             alt="College Cover"
             className="w-full h-120 object-cover rounded-lg shadow-lg"
           />
 
-          {/* College Details */}
           <div className="w-full mt-5">
-            <div className="flex items-baseline justify-between">
-              <h1 className="text-3xl font-bold flex items-center gap-2">
-                {college.name}
-                {college.is_approved && <FaCheckCircle className="text-green-400 text-2xl" />}
-              </h1>
-              <div className="flex space-x-1 mt-1 me-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <FaStar
-                    key={star}
-                    className={`text-lg ${averageRating >= star ? "text-yellow-400" : "text-gray-600"}`}
-                  />
-                ))}
+            <div className="flex items-center">
+              <div>
+                <img  className="rounded-full me-5 h-15 w-15" src={college.logo} alt="logo" />
+              </div>
+              <div className="w-full">
+                <div className="flex items-baseline justify-between">
+                  <h1 className="text-3xl font-bold flex items-center gap-2">
+                    {college.name}
+                    {college.is_approved && <FaCheckCircle className="text-green-400 text-2xl" />}
+                  </h1>
+                  <div className="flex space-x-1 mt-1 me-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <FaStar
+                        key={star}
+                        className={`text-lg ${averageRating >= star ? "text-yellow-400" : "text-gray-600"}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <p className="text-gray-400 mt-2 flex items-center gap-2 text-lg">
+                  <FaMapMarkerAlt className="text-red-600" /> {college?.street}, {college?.district}, {college?.state}
+                </p>
               </div>
             </div>
-            <p className="text-gray-400 mt-2 flex items-center gap-2 text-lg">
-              <FaMapMarkerAlt className="text-red-600" /> {college?.street}, {college?.district}, {college?.state}
-            </p>
             <div>
               <h2 className="text-xl font-semibold mt-5">College Details:</h2>
               <p className="text-gray-300 mt-2">{college?.description}</p>
@@ -107,7 +119,6 @@ const View = () => {
           </div>
         </div>
 
-        {/* Right Section - Courses & Apply Button */}
         <div className="md:w-1/2 flex flex-col justify-center space-y-6 pe-20">
           {college?.courses?.length > 0 && (
             <div className="h-150 overflow-auto bg-gray-800 rounded-2xl p-5 shadow-lg">

@@ -3,7 +3,7 @@ import { submitCollegeApplicationAPI } from "../services/allAPI";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-const ApplyPop = ({ college, id, onClose, appData }) => {
+const ApplyPop = ({ college, id, setShowPopup, appData }) => {
 
     const navigate = useNavigate()
     const token = localStorage.getItem('access_token')
@@ -109,7 +109,8 @@ const ApplyPop = ({ college, id, onClose, appData }) => {
 
             if (result.status === 201) {
                 toast.success("Application submitted successfully!");
-                onclose()
+                setShowPopup(false);
+                navigate('/');
             } else {
                 toast.error("Failed to apply. Please try again.");
                 console.log(result);
@@ -124,7 +125,7 @@ const ApplyPop = ({ college, id, onClose, appData }) => {
         <div className="fixed inset-0 bg-opacity-90 flex items-center justify-center z-10">
             <div className="bg-white rounded-lg shadow-lg w-96 p-5 relative">
                 <button
-                    onClick={onClose}
+                    onClick={()=>setShowPopup(false)}
                     className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-lg cursor-pointer"
                 >
                     ✖
@@ -187,7 +188,7 @@ const ApplyPop = ({ college, id, onClose, appData }) => {
                     disabled={!selectedCourse}
                     onClick={handlePayment}
                 >
-                    Proceed to Payment
+                    Pay ₹300 & Apply
                 </button>
             </div>
         </div>
