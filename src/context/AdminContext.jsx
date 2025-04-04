@@ -51,7 +51,7 @@ export const AdminProvider = ({ children }) => {
     };
 
     return (
-        <AdminContext.Provider value={{ users, messages, loading }}>
+        <AdminContext.Provider value={{ users, messages, loading, fetchData }}>
             {children}
         </AdminContext.Provider>
     )

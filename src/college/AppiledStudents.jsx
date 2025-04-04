@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { Table, Button, Dropdown, Menu, Tag } from "antd";
 
-const AppiledStudents = ({ newApplications, handleStatusUpdate }) => {
+const AppliedStudents = ({ newApplications, handleStatusUpdate }) => {
   const [dropdownOpen, setDropdownOpen] = useState(null);
 
   const updateStatus = async (studentId, newStatus) => {
@@ -8,80 +9,91 @@ const AppiledStudents = ({ newApplications, handleStatusUpdate }) => {
     setDropdownOpen(null);
   };
 
+  const columns = [
+    {
+      title: "#",
+      dataIndex: "index",
+      key: "index",
+      render: (text, record, index) => index + 1,
+    },
+    {
+      title: "Student Name",
+      dataIndex: "student_name",
+      key: "student_name",
+    },
+    {
+      title: "Email / Phone",
+      dataIndex: "email",
+      key: "email",
+      render: (text, record) => (
+        <>
+          {record.email} <br /> {record.phone_number}
+        </>
+      ),
+    },
+    {
+      title: "Location",
+      dataIndex: "location",
+      key: "location",
+      render: (text, record) => (
+        `${record.street}, ${record.district}, ${record.state}`
+      ),
+    },
+    {
+      title: "School & Qualification",
+      dataIndex: "school_name",
+      key: "school_name",
+      render: (text, record) => (
+        <>
+          {record.school_name} <br /> ({record.highest_qualification}, {Math.floor(record.marks_percentage)}%)
+        </>
+      ),
+    },
+    {
+      title: "Course",
+      dataIndex: "course_name",
+      key: "course_name",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => {
+        const statusColors = {
+          approved: "green",
+          rejected: "red",
+          pending: "yellow",
+        };
+        return <Tag color={statusColors[status] || "blue"}>{status.toUpperCase()}</Tag>;
+      },
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (text, record) => (
+        <Dropdown
+          overlay={
+            <Menu>
+              <Menu.Item onClick={() => updateStatus(record.id, "approved")}>Accept</Menu.Item>
+              <Menu.Item onClick={() => updateStatus(record.id, "rejected")}>Reject</Menu.Item>
+            </Menu>
+          }
+          trigger={["click"]}
+          visible={dropdownOpen === record.id}
+          onVisibleChange={(visible) => setDropdownOpen(visible ? record.id : null)}
+        >
+          <Button type="primary">Status</Button>
+        </Dropdown>
+      ),
+    },
+  ];
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Student Applications</h1>
-
-      <table className="w-full border-collapse border border-gray-700">
-        <thead>
-          <tr className="bg-purple-700 text-white">
-            <th className="p-3 border border-gray-600">#</th>
-            <th className="p-3 border border-gray-600">Student Name</th>
-            <th className="p-3 border border-gray-600">Email / Phone</th>
-            <th className="p-3 border border-gray-600">Location</th>
-            <th className="p-3 border border-gray-600">School & Qualification</th>
-            <th className="p-3 border border-gray-600">Course</th>
-            <th className="p-3 border border-gray-600">Status</th>
-            <th className="p-3 border border-gray-600">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {newApplications.map((student, index) => (
-            <tr key={student.id} className="text-center border border-gray-600">
-              <td className="p-3 border border-gray-600">{index + 1}</td>
-              <td className="p-3 border border-gray-600 font-semibold">{student.student_name}</td>
-              <td className="p-3 border border-gray-600">
-                {student.email} <br /> {student.phone_number}
-              </td>
-              <td className="p-3 border border-gray-600">
-                {student.street}, {student.district}, {student.state}
-              </td>
-              <td className="p-3 border border-gray-600">
-                {student.school_name} <br /> ({student.highest_qualification}, {Math.floor(student.marks_percentage)}%)
-              </td>
-              <td className="p-3 border border-gray-600">{student.course_name}</td>
-              <td
-                className={`p-3 border border-gray-600 font-semibold ${
-                  student.status === "approved"
-                    ? "text-green-400"
-                    : student.status === "rejected"
-                    ? "text-red-400"
-                    : "text-yellow-400"
-                }`}
-              >
-                {student.status.charAt(0).toUpperCase() + student.status.slice(1)}
-              </td>
-              <td className="p-3 border border-gray-600 relative">
-                <button
-                  onClick={() => setDropdownOpen(dropdownOpen === student.id ? null : student.id)}
-                  className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                >
-                  Status
-                </button>
-
-                {dropdownOpen === student.id && (
-                  <div className="absolute bg-white border rounded-md shadow-lg mt-2 right-0 w-32 z-10">
-                    <button
-                      onClick={() => updateStatus(student.id, "approved")}
-                      className="block w-full text-left px-4 py-2 text-green-600 hover:bg-green-100"
-                    >
-                      Accept
-                    </button>
-                    <button
-                      onClick={() => updateStatus(student.id, "rejected")}
-                      className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-100"
-                    >
-                      Reject
-                    </button>
-                  </div>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Table dataSource={newApplications} columns={columns} rowKey="id" pagination={{ pageSize: 7 }} />
     </div>
   );
 };
 
-export default AppiledStudents;
+export default AppliedStudents;

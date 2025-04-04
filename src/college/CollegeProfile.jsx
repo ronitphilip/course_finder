@@ -91,7 +91,7 @@ const CollegeProfile = () => {
           </div>
         </div>
         <div className='col-span-3 py-5 pe-5'>
-          <div className='bg-white rounded-3xl h-full p-5'>
+          <div className='bg-gray-100 rounded-3xl h-full p-5'>
             {isPage === 'home' ? (
               <CollegeHome newApplications={newApplications} />
             ) : isPage === 'college' ? (

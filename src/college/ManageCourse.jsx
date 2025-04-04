@@ -14,7 +14,6 @@ const ManageCourse = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [newCourse, setNewCourse] = useState({ name: "", duration: "", fee: "" });
 
-    // Fetch courses on component mount
     useEffect(() => {
         fetchCourses();
     }, []);
@@ -28,18 +27,15 @@ const ManageCourse = () => {
         }
     };
 
-    // Handle edit button click
     const handleEdit = (course) => {
         setEditingCourseId(course.id);
         setEditedCourse({ ...course });
     };
 
-    // Handle input change
     const handleInputChange = (e, field) => {
         setEditedCourse({ ...editedCourse, [field]: e.target.value });
     };
 
-    // Save updated course
     const handleSave = async () => {
         try {
             await updateCourseAPI(editingCourseId, editedCourse, headers);
@@ -50,7 +46,6 @@ const ManageCourse = () => {
         }
     };
 
-    // Delete a course
     const handleDelete = async (courseId) => {
         try {
             await deleteCourseAPI(courseId, headers);
@@ -60,17 +55,14 @@ const ManageCourse = () => {
         }
     };
 
-    // Open modal to add a new course
     const showAddModal = () => {
         setIsModalVisible(true);
     };
 
-    // Handle input change for new course
     const handleNewCourseChange = (e, field) => {
         setNewCourse({ ...newCourse, [field]: e.target.value });
     };
 
-    // Add a new course
     const handleAddCourse = async () => {
         try {
             await addCourseAPI([newCourse], headers);
@@ -88,7 +80,7 @@ const ManageCourse = () => {
                 Add Course
             </Button>
 
-            <Table dataSource={courses} rowKey="id" pagination={{ pageSize: 5 }}>
+            <Table dataSource={courses} rowKey="id" pagination={{ pageSize: 7 }}>
                 <Table.Column title="Course Name" dataIndex="name" key="name"
                     render={(text, record) =>
                         editingCourseId === record.id ? (

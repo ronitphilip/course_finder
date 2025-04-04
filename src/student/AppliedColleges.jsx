@@ -1,57 +1,53 @@
 import React from "react";
+import { Table, Tag } from "antd";
 
-const AppliedColleges = ({appliedColleges}) => {
+const AppliedColleges = ({ appliedColleges }) => {
+  const columns = [
+    {
+      title: "#",
+      dataIndex: "index",
+      key: "index",
+      render: (text, record, index) => index + 1,
+    },
+    {
+      title: "College Name",
+      dataIndex: "college_name",
+      key: "college_name",
+    },
+    {
+      title: "Course",
+      dataIndex: "course_name",
+      key: "course_name",
+    },
+    {
+      title: "Applied Date",
+      dataIndex: "applied_at",
+      key: "applied_at",
+      render: (applied_at) => new Date(applied_at).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }),
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => {
+        const statusColors = {
+          approved: "green",
+          rejected: "red",
+          pending: "yellow",
+        };
+        return <Tag color={statusColors[status] || "blue"}>{status.charAt(0).toUpperCase() + status.slice(1)}</Tag>;
+      },
+    },
+  ];
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Applied Colleges</h1>
-
-      <table className="w-full border-collapse border border-gray-700">
-        <thead>
-          <tr className="bg-purple-700 text-white">
-            <th className="p-3 border border-gray-600">#</th>
-            <th className="p-3 border border-gray-600">College Name</th>
-            <th className="p-3 border border-gray-600">Course</th>
-            <th className="p-3 border border-gray-600">Applied Date</th>
-            <th className="p-3 border border-gray-600">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {appliedColleges.map((college, index) => {
-            const formattedDate = new Date(college.applied_at).toLocaleDateString(
-              "en-GB",
-              {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-              }
-            );
-
-            const formattedStatus =
-              college.status.charAt(0).toUpperCase() + college.status.slice(1);
-
-            return (
-              <tr key={college.id} className="text-center border border-gray-600">
-                <td className="p-3 border border-gray-600">{index + 1}</td>
-                <td className="p-3 border border-gray-600">{college.college_name}</td>
-                <td className="p-3 border border-gray-600">{college.course_name}</td>
-                <td className="p-3 border border-gray-600">{formattedDate}</td>
-                <td
-                  className={`p-3 border border-gray-600 font-semibold ${
-                    college.status === "approved"
-                      ? "text-green-400"
-                      : college.status === "rejected"
-                      ? "text-red-400"
-                      : "text-yellow-400"
-                  }`}
-                >
-                  {formattedStatus}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <Table dataSource={appliedColleges} columns={columns} rowKey="id" pagination={{ pageSize: 7 }} />
     </div>
   );
 };

@@ -9,7 +9,7 @@ import { useAdmin } from '../context/AdminContext';
 const Overview = () => {
 
   const { colleges, courses, location, reviews } = useCollege();
-  const { users, messages } = useAdmin();
+  const { users, messages, fetchData } = useAdmin();
 
   const navigate = useNavigate();
 
@@ -19,6 +19,7 @@ const Overview = () => {
   const [newMessages, setNewMessages] = useState(messages)
 
   useEffect(() => {
+    fetchData();
     if (colleges) {
       const pending = colleges.filter(college => !college.is_approved);
       setPendingColleges(pending);
